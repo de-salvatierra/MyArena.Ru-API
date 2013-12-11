@@ -4,10 +4,10 @@ MyArena.Ru-API
 Класс для работы с API игрового хостинга MyArena.ru
 
 Подключение:
-
+```php
 $token = 'qwertyuiopp'; // Токен управления сервером
 $api = new MyArenaAPI($token);
-
+```
 Доступные методы:
 ```php
 $api->start();      // Запуск сервера
