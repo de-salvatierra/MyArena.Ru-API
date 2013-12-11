@@ -41,7 +41,21 @@ class MyArenaAPI {
 		
 		// Формируем массив
 		$info = array();
-		$info['online']		= $data->status == 1;
+		switch($data->online)
+		{
+			case 0:
+				$info['status'] = 'Выключен';
+				break;
+			case 1:
+				$info['status'] = 'Работает';
+				break;
+			case 2:
+				$info['status'] = 'Запускается/Висит';
+				break;
+			default:
+				$info['status'] = 'Состояние неизвестно';
+		}
+		$info['online']		= $data->online !== 0;
 		$info['game']		= $data->data->s->game;
 		$info['name']		= $this->safe($data->data->s->name);
 		$info['map']		= $data->data->s->map;
@@ -165,6 +179,7 @@ class MyArenaAPI {
 		$url = $this->url . $cmd . (isset($e) && !empty($e) ? '&'.implode('&', $e) : '');
 		$get = file_get_contents($url);
 		$json = json_decode($get);
+		return $json;
 		if($json->status !== 'OK')
 			return FALSE;
 		return $json;
