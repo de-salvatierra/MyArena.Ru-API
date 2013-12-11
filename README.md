@@ -13,8 +13,8 @@ $api = new MyArenaAPI($token);
 $api->start();      // Запуск сервера
 $api->stop();       // Останов сервера
 $api->restart();    // Перезапуск сервера
-$api->changeMap();  // Смена карты
+$api->changeMap('de_dust2');  // Смена карты
 $api->mapList();    // Список карт
-$api->command();    // Отправка команды
+$api->command('amx_reloadadmins');    // Отправка команды
 $api->resources();  // Получение занимаемых ресурсов
 ```
