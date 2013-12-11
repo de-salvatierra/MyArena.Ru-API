@@ -40,8 +40,9 @@ echo $info['maxPlayers'];   // Кол-во слотов
 
 $players = $info['playersInfo']; // Информация об игроках
 ?>
+```
 
-
+```htm
 <!-- Получение информации об игроках -->
 <table>
 	<thead>
