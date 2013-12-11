@@ -38,7 +38,9 @@ echo $status['maxPlayers'];   // Кол-во слотов
 $players = $status['playersInfo']; // Информация об игроках
 ?>
 
-<table class="table table-bordered">
+
+<!-- Получение информации об игроках -->
+<table>
 	<thead>
 		<tr>
 			<th><b>Ник</b></th>
