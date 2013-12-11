@@ -165,7 +165,6 @@ class MyArenaAPI {
 		$url = $this->url . $cmd . (isset($e) && !empty($e) ? '&'.implode('&', $e) : '');
 		$get = file_get_contents($url);
 		$json = json_decode($get);
-
 		if($json->status !== 'OK')
 			return FALSE;
 		return $json;
