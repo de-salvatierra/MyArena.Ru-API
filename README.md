@@ -48,27 +48,73 @@ $players = $info['playersInfo']; // Информация об игроках
 	<thead>
 		<tr>
 			<th><b>Ник</b></th>
+```
+```php
 			<?php if(isset($players[0]['score'])):?>
+```
+```htm
 			<td><b>Счет</b></td>
+```
+```php
 			<?php endif;?>
 			<?php if(isset($players[0]['time'])):?>
+```
+```htm
 				<td><b>Время</b></td>
+```
+```php
 			<?php endif;?>
+```
+```htm
 		</tr>
 	</thead>
 	<tbody>
+```
+```php
 	<?php
 	foreach($players as $player):?>
+```
+```htm
 		<tr>
-			<td><?php echo $player['name']?></td>
+			<td>
+				<?php echo $player['name']?>
+			</td>
+```
+```php
 			<?php if(isset($player['score'])):?>
-			<td><?php echo $player['score']?></td>
+```
+```htm
+			<td>
+```
+```php
+				<?php echo $player['score']?>
+```
+```htm
+			</td>
+```
+```php
 			<?php endif;?>
 			<?php if(isset($player['time'])):?>
-			<td><?php echo $player['time']?></td>
+```
+```htm
+			<td>
+```
+```php
+				<?php echo $player['time']?>
+```
+```htm
+			</td>
+```
+```php
 			<?php endif;?>
+```
+```htm
 		</tr>
+```
+```php
 	<?php endforeach;?>
+```
+```htm
 	</tbody>
 </table>
 ```
