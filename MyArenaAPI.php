@@ -43,10 +43,10 @@ class MyArenaAPI {
 		$info = array();
 		$info['online']		= $data->status == 1;
 		$info['game']		= $data->data->s->game;
-		$info['name']		= $data->data->s->name;
+		$info['name']		= $this->safe($data->data->s->name);
 		$info['map']		= $data->data->s->map;
-		$info['curPlayers']	= $data->data->s->players;
-		$info['maxPlayers']	= $data->data->s->playersmax;
+		$info['curPlayers']	= intval($data->data->s->players);
+		$info['maxPlayers']	= intval($data->data->s->playersmax);
 		$info['playersInfo']= array();
 		
 		// Информация об игроках
@@ -54,11 +54,11 @@ class MyArenaAPI {
 		{
 			foreach($data->data->p as $p)
 			{
-				$info['playersInfo'][]['name'] = $p->name;
+				$info['playersInfo'][]['name'] = $this->safe($p->name);
 				if(isset($p->score))
-					$info['playersInfo'][]['score'] = $p->score;
+					$info['playersInfo'][]['score'] = $this->safe($p->score);
 				if(isset($p->score))
-					$info['playersInfo'][]['time'] = $p->time;
+					$info['playersInfo'][]['time'] = $this->safe($p->time);
 			}
 		}
 		
@@ -137,6 +137,16 @@ class MyArenaAPI {
 			$info[$key] = $val;
 		}
 		return $info;
+	}
+
+	/**
+	 * Вырезка лишнего
+	 * @param string $text
+	 * @return string
+	 */
+	private function safe($text)
+	{
+		return htmlspecialchars($text, ENT_QUOTES);
 	}
 
 	/**
