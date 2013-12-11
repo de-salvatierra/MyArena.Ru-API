@@ -24,6 +24,7 @@ $api->resources();                    // Получение занимаемых
 --------------------
 
 ```php
+<?php
 $token = 'qwertyuiopp'; // Токен управления сервером
 $api = new MyArenaAPI($token);
 
@@ -35,6 +36,7 @@ echo $status['curPlayers'];   // Игроков на сервере
 echo $status['maxPlayers'];   // Кол-во слотов
 
 $players = $status['playersInfo']; // Информация об игроках
+?>
 
 <table class="table table-bordered">
 	<thead>
