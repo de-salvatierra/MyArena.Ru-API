@@ -28,14 +28,17 @@ $api->resources();                    // Получение занимаемых
 $token = 'qwertyuiopp'; // Токен управления сервером
 $api = new MyArenaAPI($token);
 
-$status = $api->status();
+$info = $api->status();
 
-echo $status['name'];         // Имя сервера
-echo $status['map'];          // Текущая карта
-echo $status['curPlayers'];   // Игроков на сервере
-echo $status['maxPlayers'];   // Кол-во слотов
+$info['online'];	    // Boolean значение статуса сервера (TRUE - работает, FALSE - не работает)
 
-$players = $status['playersInfo']; // Информация об игроках
+echo $info['status'];	    // Вывод статуса сервера (Выключен, Работает, Запускается)
+echo $info['name'];         // Имя сервера
+echo $info['map'];          // Текущая карта
+echo $info['curPlayers'];   // Игроков на сервере
+echo $info['maxPlayers'];   // Кол-во слотов
+
+$players = $info['playersInfo']; // Информация об игроках
 ?>
 
 
