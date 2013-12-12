@@ -134,6 +134,7 @@ class MyArenaAPI {
 	 * @return boolean
 	 */
 	public function command($command) {
+		$command = str_replace(' ', '%20', $command);
 		return (bool)$this->cmd('consolecmd', array('cmd' => $command));
 	}
 	
