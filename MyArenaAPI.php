@@ -41,8 +41,6 @@ class MyArenaAPI {
 		
 		// Формируем массив
 		$info = array();
-		
-		// Статус сервера
 		switch($data->online)
 		{
 			case 0:
@@ -160,7 +158,7 @@ class MyArenaAPI {
 	 * @param string $text
 	 * @return string
 	 */
-	private function safe($text)
+	protected function safe($text)
 	{
 		return htmlspecialchars($text, ENT_QUOTES);
 	}
@@ -169,7 +167,7 @@ class MyArenaAPI {
 	 * Формировка и отправка запроса
 	 * @return boolean
 	 */
-	private function cmd($cmd, $extra = FALSE) {
+	protected function cmd($cmd, $extra = FALSE) {
 		if($extra && is_array($extra))
 		{
 			$e = array();
