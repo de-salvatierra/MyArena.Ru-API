@@ -16,7 +16,7 @@ $api->restart();                      // Перезапуск сервера
 $api->status();                       // Информация  о сервере
 $api->changeMap();          	      // Смена карты
 $api->mapList();                      // Список карт
-$api->command('amx_reloadadmins');    // Отправка команды
+$api->command();		      // Отправка команды
 $api->resources();                    // Получение занимаемых ресурсов
 ```
 
