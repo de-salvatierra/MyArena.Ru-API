@@ -14,7 +14,7 @@ $api->start();                        // Запуск сервера
 $api->stop();                         // Останов сервера
 $api->restart();                      // Перезапуск сервера
 $api->status();                       // Информация  о сервере
-$api->changeMap('de_dust2');          // Смена карты
+$api->changeMap();          	      // Смена карты
 $api->mapList();                      // Список карт
 $api->command('amx_reloadadmins');    // Отправка команды
 $api->resources();                    // Получение занимаемых ресурсов
@@ -27,6 +27,9 @@ $api->resources();                    // Получение занимаемых
 <?php
 $token = 'qwertyuiopp'; // Токен управления сервером
 $api = new MyArenaAPI($token);
+
+$api->changeMap('de_dust2');  		// Сменить карту на de_dust2
+$api->command('amx_reloadadmins');	// Отправить на сервер команду amx_reloadadmins
 
 $info = $api->status();
 
