@@ -5,6 +5,7 @@
  * @license Проприетарное программное обеспечение
  * @version 1.0
  */
+
 class MyArenaAPI {
 	/**
 	 * @var string Токен управления сервером
