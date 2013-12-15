@@ -45,6 +45,14 @@ echo $info['map'];          // Текущая карта
 echo $info['curPlayers'];   // Игроков на сервере
 echo $info['maxPlayers'];   // Кол-во слотов
 
+// Пример получения плагинов на сервере MineCraft
+if(isset($info['plugins']))
+	echo $info['plugins'];
+
+// Пример получения gamemode для сервера Samp:
+if(isset($info['gamemode']))
+	echo $info['gamemode'];
+
 $players = $info['playersInfo']; // Информация об игроках
 ?>
 ```
