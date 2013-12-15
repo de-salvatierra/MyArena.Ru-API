@@ -66,7 +66,7 @@ class MyArenaAPI {
 		$info['maxPlayers']	= intval($data->data->s->playersmax);
 		$info['playersInfo']= array();
 		
-		if(isset($data->data->e) && is_array($data->data->e) && !empty($data->data->e))
+		if(isset($data->data->e) && !empty($data->data->e))
 		{
 			foreach($data->data->e as $key => $val)
 			{
