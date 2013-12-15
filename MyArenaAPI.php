@@ -60,9 +60,19 @@ class MyArenaAPI {
 		$info['game']		= $data->data->s->game;
 		$info['name']		= $this->safe($data->data->s->name);
 		$info['map']		= $data->data->s->map;
+		$info['ip']			= $data->data->b->ip;
+		$info['port']		= $data->data->b->c_port;
 		$info['curPlayers']	= intval($data->data->s->players);
 		$info['maxPlayers']	= intval($data->data->s->playersmax);
 		$info['playersInfo']= array();
+		
+		if(isset($data->data->e) && is_array($data->data->e) && !empty($data->data->e))
+		{
+			foreach($data->data->e as $key => $val)
+			{
+				$info[$key] = $val;
+			}
+		}
 		
 		// Информация об игроках
 		if(isset($data->data->p) && !empty($data->data->p))
