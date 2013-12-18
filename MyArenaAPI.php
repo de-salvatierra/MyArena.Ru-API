@@ -57,7 +57,7 @@ class MyArenaAPI {
 				$info['status'] = 'Состояние неизвестно';
 		}
 		$info['online']		= $data->online !== 0;
-		$info['game']		= $data->data->s->game;
+		$info['game']		= $data->data->b->type;
 		$info['name']		= $this->safe($data->data->s->name);
 		$info['map']		= $data->data->s->map;
 		$info['ip']			= $data->data->b->ip;
