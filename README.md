@@ -38,6 +38,8 @@ $info = $api->status();
 $info['online'];	    // Boolean значение статуса сервера (TRUE - работает, FALSE - не работает)
 
 echo $info['status'];	    // Вывод статуса сервера (Выключен, Работает, Запускается)
+echo $info['game'];			// Игра (cstrike, tf2, czero...)
+echo $info['engine'];	    // Движок сервера (halflife, source, samp...)
 echo $info['ip'];			// IP сервера
 echo $info['port'];			// Порт сервера
 echo $info['name'];         // Имя сервера
