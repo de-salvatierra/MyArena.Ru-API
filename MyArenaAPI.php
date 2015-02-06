@@ -99,15 +99,17 @@ class MyArenaAPI {
 		}
 		
 		// Информация об игроках
-		if(isset($data->data->p) && !empty($data->data->p)) {
+		if(!empty($data->data->p)) {
 			foreach($data->data->p as $p) {
-				$info['playersInfo'][]['name'] = $p->name;
+                $player = array();
+				$player['name'] = $p->name;
 				if (isset($p->score)) {
-                    $info['playersInfo'][]['score'] = $p->score;
+                    $player['score'] = $p->score;
                 }
                 if (isset($p->score)) {
-                    $info['playersInfo'][]['time'] = $p->time;
+                    $player['time'] = $p->time;
                 }
+                $info['playersInfo'][] = $player;
             }
 		}
 		
