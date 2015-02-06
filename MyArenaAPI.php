@@ -59,7 +59,7 @@ class MyArenaAPI {
 		$info['online']		= $data->online !== 0;
 		$info['game']		= $data->data->s->game;
 		$info['engine']		= $data->data->b->type;
-		$info['name']		= $this->safe($data->data->s->name);
+		$info['name']		= $data->data->s->name;
 		$info['map']		= $data->data->s->map;
 		$info['ip']			= $data->data->b->ip;
 		$info['port']		= $data->data->b->c_port;
@@ -76,12 +76,12 @@ class MyArenaAPI {
 		// Информация об игроках
 		if(isset($data->data->p) && !empty($data->data->p)) {
 			foreach($data->data->p as $p) {
-				$info['playersInfo'][]['name'] = $this->safe($p->name);
+				$info['playersInfo'][]['name'] = $p->name;
 				if (isset($p->score)) {
-                    $info['playersInfo'][]['score'] = $this->safe($p->score);
+                    $info['playersInfo'][]['score'] = $p->score;
                 }
                 if (isset($p->score)) {
-                    $info['playersInfo'][]['time'] = $this->safe($p->time);
+                    $info['playersInfo'][]['time'] = $p->time;
                 }
             }
 		}
@@ -163,16 +163,6 @@ class MyArenaAPI {
 			$info[$key] = $val;
 		}
 		return $info;
-	}
-
-	/**
-	 * Вырезка лишнего
-	 * @param string $text
-	 * @return string
-	 */
-	protected function safe($text)
-	{
-		return htmlspecialchars($text, ENT_QUOTES);
 	}
 
 	/**
