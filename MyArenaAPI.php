@@ -37,13 +37,13 @@ class MyArenaAPI {
 		$data =  $this->cmd('status');
 		
 		// Если ошибка при обработке команды, возвращаем ложь
-		if(!$data)
-			return FALSE;
-		
-		// Формируем массив
+		if (!$data) {
+            return false;
+        }
+
+        // Формируем массив
 		$info = array();
-		switch($data->online)
-		{
+		switch($data->online) {
 			case 0:
 				$info['status'] = 'Выключен';
 				break;
@@ -67,25 +67,23 @@ class MyArenaAPI {
 		$info['maxPlayers']	= intval($data->data->s->playersmax);
 		$info['playersInfo']= array();
 		
-		if(isset($data->data->e) && !empty($data->data->e))
-		{
-			foreach($data->data->e as $key => $val)
-			{
+		if(isset($data->data->e) && !empty($data->data->e)) {
+			foreach($data->data->e as $key => $val) {
 				$info[$key] = $val;
 			}
 		}
 		
 		// Информация об игроках
-		if(isset($data->data->p) && !empty($data->data->p))
-		{
-			foreach($data->data->p as $p)
-			{
+		if(isset($data->data->p) && !empty($data->data->p)) {
+			foreach($data->data->p as $p) {
 				$info['playersInfo'][]['name'] = $this->safe($p->name);
-				if(isset($p->score))
-					$info['playersInfo'][]['score'] = $this->safe($p->score);
-				if(isset($p->score))
-					$info['playersInfo'][]['time'] = $this->safe($p->time);
-			}
+				if (isset($p->score)) {
+                    $info['playersInfo'][]['score'] = $this->safe($p->score);
+                }
+                if (isset($p->score)) {
+                    $info['playersInfo'][]['time'] = $this->safe($p->time);
+                }
+            }
 		}
 		
 		return $info;
@@ -124,9 +122,10 @@ class MyArenaAPI {
 	 */
 	public function changeMap($map)
 	{
-		if(!in_array($map, $this->mapList()))
-			return FALSE;
-		return (bool)$this->cmd('changelevel', array('map' => $map));
+		if (!in_array($map, $this->mapList())) {
+            return false;
+        }
+        return (bool)$this->cmd('changelevel', array('map' => $map));
 	}
 	
 	/**
@@ -136,9 +135,10 @@ class MyArenaAPI {
 	public function mapList()
 	{
 		$data = $this->cmd('getmaps');
-		if(!isset($data->maps))
-			return array();
-		return $data->maps;
+		if (!isset($data->maps)) {
+            return array();
+        }
+        return $data->maps;
 	}
 	
 	/**
@@ -158,8 +158,7 @@ class MyArenaAPI {
 	{
 		$data = $this->cmd('getresources');
 		$info = array();
-		foreach($data as $key => $val)
-		{
+		foreach($data as $key => $val) {
 			if($key === 'status') continue;
 			$info[$key] = $val;
 		}
@@ -180,20 +179,19 @@ class MyArenaAPI {
 	 * Формировка и отправка запроса
 	 * @return boolean
 	 */
-	protected function cmd($cmd, $extra = FALSE) {
-		if($extra && is_array($extra))
-		{
+	protected function cmd($cmd, $extra = false) {
+		if($extra && is_array($extra)) {
 			$e = array();
-			foreach($extra as $key => $val)
-			{
+			foreach($extra as $key => $val) {
 				$e[] = $key . '=' . $val;
 			}
 		}
 		$url = $this->url . $cmd . (isset($e) && !empty($e) ? '&'.implode('&', $e) : '');
 		$get = file_get_contents($url);
 		$json = json_decode($get);
-		if($json->status !== 'OK')
-			return FALSE;
-		return $json;
+		if ($json->status !== 'OK') {
+            return false;
+        }
+        return $json;
 	}
 }
