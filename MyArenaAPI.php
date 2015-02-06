@@ -67,7 +67,28 @@ class MyArenaAPI {
         }
 
         // Формируем массив
-		$info = array();
+		$info = array(
+            'online'        => $data->online !== 0,
+            'game'          => $data->data->s->game,
+            'engine'        => $data->data->b->type,
+            'name'          => $data->data->s->name,
+            'map'           => $data->data->s->map,
+            'ip'            => $data->data->b->ip,
+            'port'          => $data->data->b->c_port,
+            'curPlayers'    => intval($data->data->s->players),
+            'maxPlayers'    => intval($data->data->s->playersmax),
+            'playersInfo'   => array(),
+            'hostInfo'      => array(
+                'serverId'      => $data->server_id,
+                'game'          => $data->server_name,
+                'address'       => $data->server_address,
+                'slots'         => $data->server_maxslots,
+                'location'      => $data->server_location,
+                'tariff'        => $data->server_type,
+                'blockDate'     => $data->server_dateblock,
+                'days'          => $data->server_daystoblock,
+            )
+        );
 		switch($data->online) {
 			case 0:
 				$info['status'] = 'Выключен';
@@ -81,17 +102,7 @@ class MyArenaAPI {
 			default:
 				$info['status'] = 'Состояние неизвестно';
 		}
-		$info['online']		= $data->online !== 0;
-		$info['game']		= $data->data->s->game;
-		$info['engine']		= $data->data->b->type;
-		$info['name']		= $data->data->s->name;
-		$info['map']		= $data->data->s->map;
-		$info['ip']			= $data->data->b->ip;
-		$info['port']		= $data->data->b->c_port;
-		$info['curPlayers']	= intval($data->data->s->players);
-		$info['maxPlayers']	= intval($data->data->s->playersmax);
-		$info['playersInfo']= array();
-		
+        
 		if(isset($data->data->e) && !empty($data->data->e)) {
 			foreach($data->data->e as $key => $val) {
 				$info[$key] = $val;
