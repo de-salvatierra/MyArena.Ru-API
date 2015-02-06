@@ -163,6 +163,7 @@ class MyArenaAPI {
 		if (!isset($data->maps)) {
             return array();
         }
+        sort($data->maps);
         return $data->maps;
 	}
 	
