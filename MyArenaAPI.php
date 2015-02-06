@@ -16,6 +16,12 @@ class MyArenaAPI {
 	 * @var string Сформированный URL API
 	 */
 	protected $url;
+    
+    /**
+     * Ошибки
+     * @var type 
+     */
+    private $errors = array();
 	
 	/**
 	 * Конструктор класса
@@ -27,6 +33,25 @@ class MyArenaAPI {
 		$this->url = 'https://www.myarena.ru/api.php?token='.$this->token.'&query=';
 	}
 	
+    /**
+     * Ошибки
+     * @param boolean $string Возвращать массивом или строкой
+     * @param string $separator Если отдавать строкой, то чем разделять массив
+     * @return mixed ошибки в массиве или строкой
+     */
+    public function getErrors($string = false, $separator = PHP_EOL)
+    {
+        return $string ? implode($separator, $this->errors) : $this->errors;
+    }
+    
+    /**
+     * 
+     * @return boolean
+     */
+    public function hasErrors() {
+        return empty($this->errors);
+    }
+    
 	/**
 	 * Получение информации от сервера
 	 * @return boolean|array Возвращает ложь при ошибке, или массив с данными от сервера
@@ -145,7 +170,8 @@ class MyArenaAPI {
 	 * Кастом команда
 	 * @return boolean
 	 */
-	public function command($command) {
+	public function command($command)
+    {
 		$command = str_replace(' ', '%20', $command);
 		return (bool)$this->cmd('consolecmd', array('cmd' => $command));
 	}
@@ -169,7 +195,8 @@ class MyArenaAPI {
 	 * Формировка и отправка запроса
 	 * @return boolean
 	 */
-	protected function cmd($cmd, $extra = false) {
+	protected function cmd($cmd, $extra = false)
+    {
 		if($extra && is_array($extra)) {
 			$e = array();
 			foreach($extra as $key => $val) {
@@ -179,7 +206,8 @@ class MyArenaAPI {
 		$url = $this->url . $cmd . (isset($e) && !empty($e) ? '&'.implode('&', $e) : '');
 		$get = file_get_contents($url);
 		$json = json_decode($get);
-		if ($json->status !== 'OK') {
+		if (strtolower($json->status) !== 'ok') {
+            $this->errors[] = !empty($json->message) ? $json->message : '';
             return false;
         }
         return $json;
