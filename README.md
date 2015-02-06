@@ -64,12 +64,18 @@ $players = $info['playersInfo']; // Информация об игроках
 <table>
 	<thead>
 		<tr>
-			<th><b>Ник</b></th>
+			<th>
+                <b>Ник</b>
+            </th>
 			<?php if(isset($players[0]['score'])):?>
-			<td><b>Счет</b></td>
+			<th>
+                <b>Счет</b>
+            </th>
 			<?php endif;?>
 			<?php if(isset($players[0]['time'])):?>
-				<td><b>Время</b></td>
+			<th>
+                <b>Время</b>
+            </th>
 			<?php endif;?>
 		</tr>
 	</thead>
