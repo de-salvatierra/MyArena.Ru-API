@@ -195,15 +195,18 @@ class MyArenaAPI {
 	 * Формировка и отправка запроса
 	 * @return boolean
 	 */
-	protected function cmd($cmd, $extra = false)
+	protected function cmd($cmd, Array $extra = array())
     {
-		if($extra && is_array($extra)) {
+		if(!empty($extra)) {
 			$e = array();
 			foreach($extra as $key => $val) {
 				$e[] = $key . '=' . $val;
 			}
 		}
-		$url = $this->url . $cmd . (isset($e) && !empty($e) ? '&'.implode('&', $e) : '');
+		$url = $this->url . $cmd;
+        if(!empty($e)) {
+            $url .= implode('&', $e);
+        }
 		$get = file_get_contents($url);
 		$json = json_decode($get);
 		if (strtolower($json->status) !== 'ok') {
