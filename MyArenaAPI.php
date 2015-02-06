@@ -68,7 +68,7 @@ class MyArenaAPI {
 
         // Формируем массив
 		$info = array(
-            'online'        => $data->online !== 0,
+            'online'        => $data->online,
             'game'          => $data->data->s->game,
             'engine'        => $data->data->b->type,
             'name'          => $data->data->s->name,
