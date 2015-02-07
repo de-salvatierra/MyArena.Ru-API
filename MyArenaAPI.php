@@ -49,7 +49,7 @@ class MyArenaAPI {
      * @return boolean
      */
     public function hasErrors() {
-        return empty($this->errors);
+        return (bool)$this->errors;
     }
     
 	/**
@@ -199,8 +199,10 @@ class MyArenaAPI {
 		$data = $this->cmd('getresources');
 		$info = array();
 		foreach($data as $key => $val) {
-			if($key === 'status') continue;
-			$info[$key] = $val;
+			if ($key == 'status') {
+                continue;
+            }
+            $info[$key] = $val;
 		}
 		return $info;
 	}
