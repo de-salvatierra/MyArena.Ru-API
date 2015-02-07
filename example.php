@@ -13,7 +13,7 @@
  */
 
 // Токен
-$token        = '123456789';
+$token        = '123456';
 
 // Пользователи
 $users = array(
@@ -177,10 +177,6 @@ if($auth) {
                                             <td id="address"><?php echo $info['hostInfo']['address']?></td>
                                         </tr>
                                         <tr>
-                                            <th>Игра:</th>
-                                            <td id="game"><?php echo $info['hostInfo']['game']?></td>
-                                        </tr>
-                                        <tr>
                                             <th>Статус:</th>
                                             <td id="status"><?php echo $info['status']?></td>
                                         </tr>
@@ -285,32 +281,30 @@ if($auth) {
                                         <tr>
                                             <th>Управление:</th>
                                             <td>
-                                                <div class="btn-group" role="group" aria-label="...">
                                                     <button 
-                                                        class="btn btn-success serverAction" 
+                                                        class="btn btn-xs btn-success serverAction" 
                                                         id="start" 
                                                         disabled>
                                                         Включить
                                                     </button>
                                                     <button 
-                                                        class="btn btn-danger serverAction" 
+                                                        class="btn btn-xs btn-danger serverAction" 
                                                         id="stop" 
                                                         disabled>
                                                         Выключить
                                                     </button>
                                                     <button 
-                                                        class="btn btn-warning serverAction" 
+                                                        class="btn btn-xs btn-warning serverAction" 
                                                         id="restart" 
                                                         disabled>
                                                         Перезапустить
                                                     </button>
-                                                </div>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td colspan="2">
                                                 <form action="" method="post" id="sendCommand">
-                                                    <div class="input-group col-md-12">
+                                                    <div class="input-group input-group-sm col-md-12 col-sm-12 col-xs-12 col-lg-12">
                                                         <input 
                                                             type="text" 
                                                             class="form-control" 
