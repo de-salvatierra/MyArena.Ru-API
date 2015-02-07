@@ -224,7 +224,9 @@ class MyArenaAPI {
 		$get = file_get_contents($url);
 		$json = json_decode($get);
 		if (strtolower($json->status) !== 'ok') {
-            $this->errors[] = !empty($json->message) ? $json->message : '';
+            if(isset($json->message) && $json->message) {
+                $this->errors[] = $json->message;
+            }
             return false;
         }
         return $json;
