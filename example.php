@@ -13,7 +13,7 @@
  */
 
 // Токен
-$token        = '123456';
+$token        = '123';
 
 // Пользователи
 $users = array(
@@ -23,6 +23,8 @@ $users = array(
 
 // Сессия
 session_start();
+
+$scriptName = filter_input(INPUT_SERVER, 'PHP_SELF');
 
 // Авторизован ли юзер
 $auth         = !empty($_SESSION['user']);
@@ -57,7 +59,7 @@ if($login && $password) {
         $_SESSION['user'] = true;
         $auth = true;
     }
-    header('Location: example.php');
+    header('Location: ' . $scriptName);
 }
 
 // Получение инфы
@@ -100,7 +102,7 @@ if($auth) {
     $action       = filter_input(INPUT_POST, 'action');
     $map          = filter_input(INPUT_POST, 'map');
     $command      = filter_input(INPUT_POST, 'command');
-    $logout     = filter_input(INPUT_GET, 'logout');
+    $logout       = filter_input(INPUT_GET, 'logout');
 
     /** Обработчики **/
     // Выход
@@ -109,7 +111,7 @@ if($auth) {
             session_destroy();
             $auth = false;
         }
-        header('Location: example.php');
+        header('Location: ' . $scriptName);
     }
 
     // Действие над сервером (вкл, выкл, рестарт)
