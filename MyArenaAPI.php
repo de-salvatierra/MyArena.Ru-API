@@ -221,7 +221,7 @@ class MyArenaAPI {
 		}
 		$url = $this->url . $cmd;
         if(!empty($e)) {
-            $url .= implode('&', $e);
+            $url .= '&'.implode('&', $e);
         }
 		$get = file_get_contents($url);
 		$json = json_decode($get);
