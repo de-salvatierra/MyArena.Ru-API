@@ -1,0 +1,16 @@
+{
+    "name": "desalvatierra/myarenaapi",
+    "type": "library",
+    "description": "Library for manage game servers of game hosting MyArena.Ru",
+    "keywords": ["myarena", "game", "game hosting"],
+    "license": "GPL-2.0",
+    "require": {
+        "php": ">=7.1.1",
+        "guzzlehttp/guzzle": "~6.2.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "DeSalvatierra\\MyArena\\Api\\": "src/"
+        }
+    }
+}
