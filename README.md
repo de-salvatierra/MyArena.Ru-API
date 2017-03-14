@@ -1,103 +1,105 @@
 MyArena.Ru-API
 ==============
 
-Класс для работы с API игрового хостинга MyArena.ru
+Библиотека для работы с API игрового хостинга MyArena.ru
 
 Подключение:
 ```php
-$token = 'qwertyuiopp'; // Токен управления сервером
-$api = new MyArenaAPI($token);
+<?php
+use DeSalvatierra\MyArena\Api\Api;
+
+include './vendor/autoload.php';
+$token = 'qwertyuiopp';
+$ma = new Api($token);
 ```
 Доступные методы:
 ```php
-$api->start();                        // Запуск сервера
-$api->stop();                         // Останов сервера
-$api->restart();                      // Перезапуск сервера
-$api->status();                       // Информация  о сервере
-$api->changeMap();          	      // Смена карты
-$api->mapList();                      // Список карт
-$api->command();		      // Отправка команды
-$api->resources();                    // Получение занимаемых ресурсов
-```
+<?php
 
-Если сервер отдает дополнительные параметры, например gamemode в сервере Samp, то это так же будет status() в формате 'параметр' => 'значение'
+$api->start();          // Запуск сервера
+$api->stop();           // Останов сервера
+$api->restart();        // Перезапуск сервера
+$api->status();         // Информация  о сервере
+$api->changeMap();      // Смена карты
+$api->mapList();        // Список карт
+$api->command();        // Отправка команды
+$api->resources();      // Получение занимаемых ресурсов
+```
 
 Пример использования
 --------------------
 
 ```php
 <?php
-$token = 'qwertyuiopp'; // Токен управления сервером
-$api = new MyArenaAPI($token);
+use DeSalvatierra\MyArena\Api\Api;
+
+include './vendor/autoload.php';
+$token = 'qwertyuiopp';
+$ma = new Api($token); // Токен доступа (Конечно же измените на свой)
 
 $api->changeMap('de_dust2');  		// Сменить карту на de_dust2
 $api->command('amx_reloadadmins');	// Отправить на сервер команду amx_reloadadmins
 
 $info = $api->status();
 
-$info['online'];	    // Boolean значение статуса сервера (TRUE - работает, FALSE - не работает)
+$info->getOnline();	        // Числовое значение статуса сервера (0 - Выключен, 1 - Работает, 2 - Запускается или завис)
 
-echo $info['status'];	    // Вывод статуса сервера (Выключен, Работает, Запускается)
-echo $info['game'];			// Игра (cstrike, tf2, czero...)
-echo $info['engine'];	    // Движок сервера (halflife, source, samp...)
-echo $info['ip'];			// IP сервера
-echo $info['port'];			// Порт сервера
-echo $info['name'];         // Имя сервера
-echo $info['map'];          // Текущая карта
-echo $info['curPlayers'];   // Игроков на сервере
-echo $info['maxPlayers'];   // Кол-во слотов
+echo $info->getStatus();	// Строковое представление статуса (Выключен, Работает, Запускается/Завис)
+echo $info->getGame();		// Игра (cstrike, tf2, czero...)
+echo $info->getEngine();	// Движок сервера (halflife, source, samp...)
+echo $info->getIp();	    // IP сервера
+echo $info->getPort();		// Порт сервера
+echo $info->getName();      // Имя сервера
+echo $info->getMap();       // Текущая карта
+echo $info->getCurrentPlayers();   // Игроков на сервере
+echo $info->getMaxPlayers();   // Кол-во слотов
 
-// Пример получения плагинов на сервере MineCraft
-if(isset($info['plugins']))
-	echo $info['plugins'];
+// Так же есть информация от хостинга:
+$hostInfo = $info->getHostInfo();
 
-// Пример получения gamemode для сервера Samp:
-if(isset($info['gamemode']))
-	echo $info['gamemode'];
+$hostInfo->getAddress(); // Полный адрес с портом
+$hostInfo->getBlockDate(); // Дата блокировки. Если null - значит сервер бесплатный
+$hostInfo->getDays(); // Остаток дней аренды. Если 0 - значитлибо истекает сегодня, либо бесплатный
+$hostInfo->getGameName(); // Полное название игры
+$hostInfo->getId(); // ID сервера на хостинге
+$hostInfo->getLocation(); // Имя локации
+$hostInfo->getSlots(); // Количество слотов по тарифу
+$hostInfo->getTariff(); // Название тарифа
 
-$players = $info['playersInfo']; // Информация об игроках
+// Информация об игроках
+$players = $info->getPlayers();
 ?>
 ```
-
 ```php
 <!-- Получение информации об игроках -->
 <table>
-	<thead>
-		<tr>
-			<th>
+    <thead>
+        <tr>
+            <th>
                 <b>Ник</b>
             </th>
-			<?php if(isset($players[0]['score'])):?>
-			<th>
+            <th>
                 <b>Счет</b>
             </th>
-			<?php endif;?>
-			<?php if(isset($players[0]['time'])):?>
-			<th>
+            <th>
                 <b>Время</b>
             </th>
-			<?php endif;?>
-		</tr>
-	</thead>
-	<tbody>
-	<?php
-	foreach($players as $player):?>
-		<tr>
-			<td>
-				<?php echo $player['name']?>
-			</td>
-			<?php if(isset($player['score'])):?>
-			<td>
-				<?php echo $player['score']?>
-			</td>
-			<?php endif;?>
-			<?php if(isset($player['time'])):?>
-			<td>
-				<?php echo $player['time']?>
-			</td>
-			<?php endif;?>
-		</tr>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach($players as $player):?>
+        <tr>
+            <td>
+                <?php echo $player->getName()?>
+            </td>
+            <td>
+                <?php echo $player->getScore()?>
+            </td>
+            <td>
+                <?php echo $player->getTime()?>
+            </td>
+        </tr>
 	<?php endforeach;?>
-	</tbody>
+    </tbody>
 </table>
 ```

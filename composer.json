@@ -3,9 +3,9 @@
     "type": "library",
     "description": "Library for manage game servers of game hosting MyArena.Ru",
     "keywords": ["myarena", "game", "game hosting"],
-    "license": "MIT",
+    "license": "GPL-2.0",
     "require": {
-        "php": ">=5.6.0",
+        "php": ">=7.1.1",
         "guzzlehttp/guzzle": "~6.2.2"
     },
     "autoload": {
