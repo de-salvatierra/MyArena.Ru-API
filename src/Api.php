@@ -71,7 +71,7 @@ class Api
                 $players[] = new Player(trim($p->name), $p->score ?? null, $p->time ?? null);
             }
         }
-
+        $dateBlock = intval($data->server_dateblock);
         $server = new Server(
             intval($data->online),
             trim($data->data->s->game),
@@ -90,8 +90,8 @@ class Api
                 intval($data->server_maxslots),
                 trim($data->server_location),
                 trim($data->server_type),
-                trim($data->server_dateblock),
-                trim($data->server_daystoblock)
+                intval($data->server_daystoblock),
+                $dateBlock ? (new \DateTime())->setTimestamp($dateBlock) : null
             )
         );
 
