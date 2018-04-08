@@ -1,13 +1,15 @@
 <?php
 
-/**
- * Информация о сервере на основании данных хостинга
- */
+declare(strict_types=1);
 
 namespace DeSalvatierra\MyArena\Api;
 
 use DateTime;
 
+/**
+ * Class HostInfo
+ * @package DeSalvatierra\MyArena\Api
+ */
 class HostInfo
 {
     /**
@@ -49,39 +51,6 @@ class HostInfo
      * @var int Количество дней, оставшееся до конца аренды сервера
      */
     protected $days;
-
-    /**
-     * HostInfo constructor.
-     *
-     * @param int $id ID сервера
-     * @param string $gameName Название игры
-     * @param string $address Полный адрес сервера с портом
-     * @param int $slots количество слотов сервера по тарифу
-     * @param string $location Название локации, на которой расположен сервер
-     * @param string $tariff Название тарифа
-     * @param int $days Количество дней, оставшееся до конца аренды сервера
-     * @param DateTime|null $blockDate Дата блокировки сервера. Если null - значит бесплатный
-     */
-    public function __construct(
-        int $id,
-        string $gameName,
-        string $address,
-        int $slots,
-        string $location,
-        string $tariff,
-        int $days,
-        $blockDate
-    )
-    {
-        $this->id = $id;
-        $this->gameName = $gameName;
-        $this->address = $address;
-        $this->slots = $slots;
-        $this->location = $location;
-        $this->tariff = $tariff;
-        $this->days = $days;
-        $this->blockDate = $blockDate;
-    }
 
     /**
      * @return int ID сервера на хостинге
@@ -145,5 +114,85 @@ class HostInfo
     public function getDays(): int
     {
         return $this->days;
+    }
+
+    /**
+     * @param int $id
+     * @return HostInfo
+     */
+    public function setId(int $id): HostInfo
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @param string $gameName
+     * @return HostInfo
+     */
+    public function setGameName(?string $gameName): HostInfo
+    {
+        $this->gameName = $gameName;
+        return $this;
+    }
+
+    /**
+     * @param string $address
+     * @return HostInfo
+     */
+    public function setAddress(?string $address): HostInfo
+    {
+        $this->address = $address;
+        return $this;
+    }
+
+    /**
+     * @param int $slots
+     * @return HostInfo
+     */
+    public function setSlots(int $slots): HostInfo
+    {
+        $this->slots = $slots;
+        return $this;
+    }
+
+    /**
+     * @param string $location
+     * @return HostInfo
+     */
+    public function setLocation(?string $location): HostInfo
+    {
+        $this->location = $location;
+        return $this;
+    }
+
+    /**
+     * @param string $tariff
+     * @return HostInfo
+     */
+    public function setTariff(?string $tariff): HostInfo
+    {
+        $this->tariff = $tariff;
+        return $this;
+    }
+
+    /**
+     * @param DateTime|null $blockDate
+     * @return HostInfo
+     */
+    public function setBlockDate(?DateTime $blockDate): HostInfo
+    {
+        $this->blockDate = $blockDate;
+        return $this;
+    }
+
+    /**
+     * @param int $days
+     * @return HostInfo
+     */
+    public function setDays(int $days): HostInfo
+    {
+        $this->days = $days;
+        return $this;
     }
 }

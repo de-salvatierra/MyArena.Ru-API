@@ -1,7 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DeSalvatierra\MyArena\Api;
 
+/**
+ * Class Server
+ * @package DeSalvatierra\MyArena\Api
+ */
 class Server
 {
     /**
@@ -58,33 +64,6 @@ class Server
      * @var Player[]
      */
     protected $players;
-
-    public function __construct(
-        int $online,
-        string $game,
-        string $engine,
-        string $name,
-        string $map,
-        string $ip,
-        int $port,
-        int $currentPlayers,
-        int $maxPlayers,
-        array $players,
-        HostInfo $hostInfo
-    )
-    {
-        $this->online = $online;
-        $this->game = $game;
-        $this->engine = $engine;
-        $this->name = $name;
-        $this->map = $map;
-        $this->ip = $ip;
-        $this->port = $port;
-        $this->currentPlayers = $currentPlayers;
-        $this->maxPlayers = $maxPlayers;
-        $this->players = $players;
-        $this->hostInfo = $hostInfo;
-    }
 
     /**
      * @return int
@@ -190,5 +169,115 @@ class Server
     public function getPlayers(): array
     {
         return $this->players;
+    }
+
+    /**
+     * @param int $online
+     * @return Server
+     */
+    public function setOnline(int $online): Server
+    {
+        $this->online = $online;
+        return $this;
+    }
+
+    /**
+     * @param string $game
+     * @return Server
+     */
+    public function setGame(?string $game): Server
+    {
+        $this->game = $game;
+        return $this;
+    }
+
+    /**
+     * @param string $engine
+     * @return Server
+     */
+    public function setEngine(?string $engine): Server
+    {
+        $this->engine = $engine;
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return Server
+     */
+    public function setName(?string $name): Server
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @param string $map
+     * @return Server
+     */
+    public function setMap(?string $map): Server
+    {
+        $this->map = $map;
+        return $this;
+    }
+
+    /**
+     * @param string $ip
+     * @return Server
+     */
+    public function setIp(?string $ip): Server
+    {
+        $this->ip = $ip;
+        return $this;
+    }
+
+    /**
+     * @param int $port
+     * @return Server
+     */
+    public function setPort(int $port): Server
+    {
+        $this->port = $port;
+        return $this;
+    }
+
+    /**
+     * @param int $currentPlayers
+     * @return Server
+     */
+    public function setCurrentPlayers(int $currentPlayers): Server
+    {
+        $this->currentPlayers = $currentPlayers;
+        return $this;
+    }
+
+    /**
+     * @param int $maxPlayers
+     * @return Server
+     */
+    public function setMaxPlayers(int $maxPlayers): Server
+    {
+        $this->maxPlayers = $maxPlayers;
+        return $this;
+    }
+
+    /**
+     * @param HostInfo $hostInfo
+     * @return Server
+     */
+    public function setHostInfo(HostInfo $hostInfo): Server
+    {
+        $this->hostInfo = $hostInfo;
+        return $this;
+    }
+
+    /**
+     * @param Player[] $players
+     * @return Server
+     */
+    public function setPlayers(array $players): Server
+    {
+        $this->players = $players;
+        return $this;
     }
 }

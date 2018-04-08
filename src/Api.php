@@ -1,10 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DeSalvatierra\MyArena\Api;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
+/**
+ * Class Api
+ * @package DeSalvatierra\MyArena\Api
+ */
 class Api
 {
     /**
@@ -66,35 +72,43 @@ class Api
 
         $players = [];
         // Информация об игроках
-        if(!empty($data->data->p)) {
+        if(!empty($data->data->p) && is_array($data->data->p)) {
             foreach($data->data->p as $p) {
-                $players[] = new Player(trim($p->name), $p->score ?? null, $p->time ?? null);
+                $player = new Player();
+                $player->setName($p->name)
+                    ->setTime($p->time ?: null);
+                if(is_numeric($p->score)) {
+                    $player->setScore($p->score);
+                }
+                $players[] = $player;
             }
         }
-        $dateBlock = intval($data->server_dateblock);
-        $server = new Server(
-            intval($data->online),
-            trim($data->data->s->game),
-            trim($data->data->b->type),
-            trim($data->data->s->name),
-            trim($data->data->s->map),
-            trim($data->data->b->ip),
-            intval($data->data->b->c_port),
-            intval($data->data->s->players),
-            intval($data->data->s->playersmax),
-            $players,
-            new HostInfo(
-                intval($data->server_id),
-                trim($data->server_name),
-                trim($data->server_address),
-                intval($data->server_maxslots),
-                trim($data->server_location),
-                trim($data->server_type),
-                intval($data->server_daystoblock),
-                $dateBlock ? (new \DateTime())->setTimestamp($dateBlock) : null
-            )
-        );
 
+        $hostInfo = new HostInfo();
+        $hostInfo->setId(intval($data->server_id))
+            ->setGameName($data->server_name)
+            ->setAddress($data->server_address)
+            ->setSlots(intval($data->server_maxslots))
+            ->setLocation($data->server_location)
+            ->setTariff($data->server_type)
+            ->setDays(intval($data->server_daystoblock));
+
+        if($data->server_dateblock) {
+            $hostInfo->setBlockDate((new \DateTime())->setTimestamp(intval($data->server_dateblock)));
+        }
+
+        $server = new Server();
+        $server->setOnline(intval($data->online))
+            ->setGame($data->data->s->game)
+            ->setEngine($data->data->b->type)
+            ->setName($data->data->s->name)
+            ->setMap($data->data->s->map)
+            ->setIp($data->data->b->ip)
+            ->setPort(intval($data->data->b->c_port))
+            ->setCurrentPlayers(intval($data->data->s->players))
+            ->setMaxPlayers(intval($data->data->s->playersmax))
+            ->setPlayers($players)
+            ->setHostInfo($hostInfo);
         return $server;
     }
 
@@ -209,7 +223,7 @@ class Api
         } catch(RequestException $e) {
             return $default;
         }
-        $responseData = json_decode($response->getBody());
+        $responseData = json_decode((string)$response->getBody());
         if(json_last_error() !== JSON_ERROR_NONE) {
             return $default;
         }
