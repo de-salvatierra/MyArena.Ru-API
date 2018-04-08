@@ -1,7 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DeSalvatierra\MyArena\Api;
 
+/**
+ * Class Player
+ * @package DeSalvatierra\MyArena\Api
+ */
 class Player
 {
     /**
@@ -20,19 +26,50 @@ class Player
     protected $time;
 
     /**
-     * Player constructor.
-     *
-     * @param string $name Ник игрока
-     * @param int|null $score Счет
-     * @param null|string $time Время
+     * @param string $name
+     * @return Player
      */
-    public function __construct(string $name, ?int $score, ?string $time)
+    public function setName(?string $name): Player
     {
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @param int $score
+     * @return Player
+     */
+    public function setScore(int $score): Player
+    {
         $this->score = $score;
-        if($time) {
-            $this->setTime($time);
+        return $this;
+    }
+
+    /**
+     * @param string $time
+     * @return Player
+     */
+    public function setTime(?string $time): Player
+    {
+        if(!$time) {
+            $this->setDefaultTime();
+            return $this;
         }
+        [$hours, $minutes, $seconds] = explode(':', $time);
+        if(intval($hours) < 0) {
+            $hours = '00';
+        }
+        try {
+            $this->time = new \DateInterval("PT{$hours}H{$minutes}M{$seconds}S");
+        } catch(\Exception $e) {
+            $this->setDefaultTime();
+        }
+        return $this;
+    }
+
+    private function setDefaultTime()
+    {
+        $this->time = new \DateInterval("PT00H00M00S");
     }
 
     /**
@@ -57,14 +94,5 @@ class Player
     public function getTime()
     {
         return $this->time;
-    }
-
-    private function setTime(string $time): void
-    {
-        [$hours, $minutes, $seconds] = explode(':', $time);
-        if(intval($hours) < 0) {
-            $hours = '00';
-        }
-        $this->time = new \DateInterval("PT{$hours}H{$minutes}M{$seconds}S");
     }
 }
