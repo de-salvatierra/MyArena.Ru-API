@@ -13,6 +13,15 @@ use GuzzleHttp\Exception\RequestException;
  */
 class Api
 {
+    private const COMMAND_STOP = 'stop';
+    private const COMMAND_START = 'start';
+    private const COMMAND_STATUS = 'status';
+    private const COMMAND_RESTART = 'restart';
+    private const COMMAND_GET_MAPS = 'getmaps';
+    private const COMMAND_CHANGELEVEL = 'changelevel';
+    private const COMMAND_GET_RESPORCES = 'getresources';
+    private const COMMAND_CONSOLE_COMMAND = 'consolecmd';
+
     /**
     * @var string Токен управления сервером
     */
@@ -63,7 +72,7 @@ class Api
     public function status(): Server
     {
         // Отправка команды status на АПИ
-        $data =  $this->request('status');
+        $data =  $this->request(self::COMMAND_STATUS);
 
         // Если ошибка при обработке команды, возвращаем ложь
         if (!$data) {
@@ -118,7 +127,7 @@ class Api
     */
     public function start(): bool
     {
-        return (bool)$this->request('start');
+        return (bool)$this->request(self::COMMAND_START);
     }
 
     /**
@@ -127,7 +136,7 @@ class Api
     */
     public function stop(): bool
     {
-        return (bool)$this->request('stop');
+        return (bool)$this->request(self::COMMAND_STOP);
     }
 
     /**
@@ -136,7 +145,7 @@ class Api
     */
     public function restart(): bool
     {
-        return (bool)$this->request('restart');
+        return (bool)$this->request(self::COMMAND_RESTART);
     }
 
     /**
@@ -149,7 +158,7 @@ class Api
         if (!\in_array($map, $this->mapList(), true)) {
             return false;
         }
-        return (bool)$this->request('changelevel', array('map' => $map));
+        return (bool)$this->request(self::COMMAND_CHANGELEVEL, array('map' => $map));
     }
 
     /**
@@ -158,7 +167,7 @@ class Api
     */
     public function mapList(): array
     {
-        $data = $this->request('getmaps');
+        $data = $this->request(self::COMMAND_GET_MAPS);
         if (!isset($data->maps)) {
             return array();
         }
@@ -174,7 +183,7 @@ class Api
     public function command(string $command): bool
     {
         $command = str_replace(' ', '%20', $command);
-        return (bool)$this->request('consolecmd', array('cmd' => $command));
+        return (bool)$this->request(self::COMMAND_CONSOLE_COMMAND, array('cmd' => $command));
     }
 
     /**
@@ -184,7 +193,7 @@ class Api
     public function resources(): array
     {
         /** @var array $data */
-        $data = $this->request('getresources', [], []);
+        $data = $this->request(self::COMMAND_GET_RESPORCES, [], []);
         $info = array();
         foreach($data as $key => $val) {
             if ($key === 'status') {
@@ -230,7 +239,7 @@ class Api
             return $default;
         }
         if (strtolower($responseData->status) !== 'ok') {
-            if(isset($responseData->message) && $responseData->message) {
+            if(!empty($responseData->message)) {
                 $this->errors[] = $responseData->message;
             }
             return $default;
