@@ -103,7 +103,7 @@ class HostInfo
     /**
      * @return DateTime|null Дата блокировки. Если null - значит сервер бесплатный
      */
-    public function getBlockDate()
+    public function getBlockDate(): ?DateTime
     {
         return $this->blockDate;
     }

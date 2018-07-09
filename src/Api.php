@@ -50,17 +50,17 @@ class Api
      * Проверяет, есть ли ошибки
      * @return boolean
      */
-    public function hasErrors()
+    public function hasErrors(): bool
     {
         return (bool)$this->errors;
     }
 
     /**
      * Получение информации от сервера
-     * @return Server Возвращает ложь при ошибке, или массив с данными от сервера
+     * @return Server
      * @throws ApiException
      */
-    public function status()
+    public function status(): Server
     {
         // Отправка команды status на АПИ
         $data =  $this->request('status');
@@ -85,28 +85,28 @@ class Api
         }
 
         $hostInfo = new HostInfo();
-        $hostInfo->setId(intval($data->server_id))
+        $hostInfo->setId((int)$data->server_id)
             ->setGameName($data->server_name)
             ->setAddress($data->server_address)
-            ->setSlots(intval($data->server_maxslots))
+            ->setSlots((int)$data->server_maxslots)
             ->setLocation($data->server_location)
             ->setTariff($data->server_type)
-            ->setDays(intval($data->server_daystoblock));
+            ->setDays((int)$data->server_daystoblock);
 
         if($data->server_dateblock) {
-            $hostInfo->setBlockDate((new \DateTime())->setTimestamp(intval($data->server_dateblock)));
+            $hostInfo->setBlockDate((new \DateTime())->setTimestamp((int)$data->server_dateblock));
         }
 
         $server = new Server();
-        $server->setOnline(intval($data->online))
+        $server->setOnline((int)$data->online)
             ->setGame($data->data->s->game)
             ->setEngine($data->data->b->type)
             ->setName($data->data->s->name)
             ->setMap($data->data->s->map)
             ->setIp($data->data->b->ip)
-            ->setPort(intval($data->data->b->c_port))
-            ->setCurrentPlayers(intval($data->data->s->players))
-            ->setMaxPlayers(intval($data->data->s->playersmax))
+            ->setPort((int)$data->data->b->c_port)
+            ->setCurrentPlayers((int)$data->data->s->players)
+            ->setMaxPlayers((int)$data->data->s->playersmax)
             ->setPlayers($players)
             ->setHostInfo($hostInfo);
         return $server;
@@ -116,7 +116,7 @@ class Api
     * Запуск сервера
     * @return boolean
     */
-    public function start()
+    public function start(): bool
     {
         return (bool)$this->request('start');
     }
@@ -125,7 +125,7 @@ class Api
     * Остановка сервера
     * @return boolean
     */
-    public function stop()
+    public function stop(): bool
     {
         return (bool)$this->request('stop');
     }
@@ -134,18 +134,19 @@ class Api
     * Перезапуск сервера
     * @return boolean
     */
-    public function restart()
+    public function restart(): bool
     {
         return (bool)$this->request('restart');
     }
 
     /**
-    * Смена карты
-    * @return boolean Если карты нет на сервере, вернет ложь
-    */
-    public function changeMap($map)
+     * Смена карты
+     * @param string $map
+     * @return boolean Если карты нет на сервере, вернет ложь
+     */
+    public function changeMap(string $map): bool
     {
-        if (!in_array($map, $this->mapList())) {
+        if (!\in_array($map, $this->mapList(), true)) {
             return false;
         }
         return (bool)$this->request('changelevel', array('map' => $map));
@@ -155,7 +156,7 @@ class Api
     * Список карт
     * @return array
     */
-    public function mapList()
+    public function mapList(): array
     {
         $data = $this->request('getmaps');
         if (!isset($data->maps)) {
@@ -166,10 +167,11 @@ class Api
     }
 
     /**
-    * Кастом команда
-    * @return boolean
-    */
-    public function command($command)
+     * Кастом команда
+     * @param string $command
+     * @return boolean
+     */
+    public function command(string $command): bool
     {
         $command = str_replace(' ', '%20', $command);
         return (bool)$this->request('consolecmd', array('cmd' => $command));
@@ -179,12 +181,13 @@ class Api
     * Получение ресурсов
     * @return array
     */
-    public function resources()
+    public function resources(): array
     {
-        $data = $this->request('getresources');
+        /** @var array $data */
+        $data = $this->request('getresources', [], []);
         $info = array();
         foreach($data as $key => $val) {
-            if ($key == 'status') {
+            if ($key === 'status') {
                 continue;
             }
             $info[$key] = $val;
@@ -197,12 +200,11 @@ class Api
      *
      * @param string $query
      * @param array $extra Дополнительные параметры запроса
-     *
      * @param mixed $default Задает что вернуть при неуспешном ответе
      *
      * @return mixed
      */
-    protected function request($query, Array $extra = array(), $default = null)
+    protected function request(string $query, Array $extra = [], $default = null)
     {
         $params = [
             'token' => $this->token,

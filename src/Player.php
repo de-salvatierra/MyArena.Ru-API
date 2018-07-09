@@ -48,6 +48,7 @@ class Player
     /**
      * @param string $time
      * @return Player
+     * @throws \Exception
      */
     public function setTime(?string $time): Player
     {
@@ -56,7 +57,7 @@ class Player
             return $this;
         }
         [$hours, $minutes, $seconds] = explode(':', $time);
-        if(intval($hours) < 0) {
+        if((int)$hours < 0) {
             $hours = '00';
         }
         try {
@@ -67,9 +68,12 @@ class Player
         return $this;
     }
 
-    private function setDefaultTime()
+    /**
+     * @throws \Exception
+     */
+    private function setDefaultTime(): void
     {
-        $this->time = new \DateInterval("PT00H00M00S");
+        $this->time = new \DateInterval('PT00H00M00S');
     }
 
     /**
@@ -83,7 +87,7 @@ class Player
     /**
      * @return int|null
      */
-    public function getScore()
+    public function getScore(): ?int
     {
         return $this->score;
     }
@@ -91,7 +95,7 @@ class Player
     /**
      * @return \DateInterval|null
      */
-    public function getTime()
+    public function getTime(): ?\DateInterval
     {
         return $this->time;
     }
