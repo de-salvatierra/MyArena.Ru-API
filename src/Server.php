@@ -10,6 +10,30 @@ namespace DeSalvatierra\MyArena\Api;
  */
 class Server
 {
+    public const STATUS_OFF = 0;
+    public const STATUS_ON = 1;
+    public const STATUS_START = 2;
+
+    /**
+     * @var string Текст неизвестного статуса
+     */
+    private static $unknownStatustext = 'Состояние неизвестно';
+
+    /**
+     * @var string Текст статуса, когда сервер работает
+     */
+    private static $statusOffText = 'Выключен';
+
+    /**
+     * @var string Текст статуса, когда сервер выключен
+     */
+    private static $statusOnText = 'Работает';
+
+    /**
+     * @var string Текст статуса, когда сервер запускается/висит
+     */
+    private static $statusStartText = 'Запускается/Висит';
+
     /**
      * @var int Код статуса сервера. 0 - сервер выключен, 1 - Работает, 2 - запускается или завис
      */
@@ -64,6 +88,20 @@ class Server
      * @var Player[]
      */
     protected $players;
+
+    /**
+     * @var array List of all statuses with descriptions
+     */
+    protected $statuses = [];
+
+    public function __construct()
+    {
+        $this->statuses = [
+            self::STATUS_OFF => self::$statusOffText,
+            self::STATUS_ON => self::$statusOnText,
+            self::STATUS_START => self::$statusStartText,
+        ];
+    }
 
     /**
      * @return int
@@ -142,16 +180,7 @@ class Server
      */
     public function getStatus(): string
     {
-        switch($this->online) {
-            case 0:
-                return 'Выключен';
-            case 1:
-                return 'Работает';
-            case 2:
-                return 'Запускается/Висит';
-            default:
-                return 'Состояние неизвестно';
-        }
+        return $this->statuses[$this->online] ?? self::$unknownStatustext;
     }
 
     /**
@@ -279,5 +308,41 @@ class Server
     {
         $this->players = $players;
         return $this;
+    }
+
+    /**
+     * Задает новый текст для статуса Выключен
+     * @param string $status
+     */
+    public static function setOffStatusText(string $status): void
+    {
+        self::$statusOffText = $status;
+    }
+
+    /**
+     * Задает новый текст для статуса Работает
+     * @param string $status
+     */
+    public static function setOnStatusText(string $status): void
+    {
+        self::$statusOnText = $status;
+    }
+
+    /**
+     * Задает новый текст для статуса Запускается/Завис
+     * @param string $status
+     */
+    public static function setStartStatusText(string $status): void
+    {
+        self::$statusStartText = $status;
+    }
+
+    /**
+     * Задает новый текст для неизвестного статуса
+     * @param string $status
+     */
+    public static function setUnknownStatusText(string $status): void
+    {
+        self::$unknownStatustext = $status;
     }
 }
