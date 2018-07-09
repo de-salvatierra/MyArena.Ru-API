@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace DeSalvatierra\MyArena\Api;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
+use function class_exists;
+use function http_build_query;
+use function file_get_contents;
 
 /**
  * Class Api
@@ -35,13 +36,19 @@ class Api
 
     private $url = 'https://www.myarena.ru';
 
+    private $endPoint = '/api.php';
+
+    private $noComposer;
+
     /**
-    * Конструктор класса
-    * @param string $token Токен управления сервером
-    */
-    public function __construct($token)
+     * Конструктор класса
+     * @param string $token Токен управления сервером
+     * @param bool $noComposer
+     */
+    public function __construct(string $token, bool $noComposer = false)
     {
         $this->token = $token;
+        $this->noComposer = $noComposer;
     }
 
     /**
@@ -67,6 +74,7 @@ class Api
     /**
      * Получение информации от сервера
      * @return Server
+     * @throws \Exception
      * @throws ApiException
      */
     public function status(): Server
@@ -224,17 +232,18 @@ class Api
             $params = array_merge($params, $extra);
         }
 
-        try {
-            $client = new Client([
-                'base_uri' => $this->url
-            ]);
-            $response = $client->get('/api.php', [
-                'query' => $params
-            ]);
-        } catch(RequestException $e) {
-            return $default;
+        if($this->noComposer || !class_exists('\GuzzleHttp\Client')) {
+            $json = $this->justRequest($params);
+        } else {
+            try {
+                $json = $this->callWithGuzzle($params);
+            } catch(RequestException $e) {
+                return $default;
+            }
         }
-        $responseData = json_decode((string)$response->getBody());
+
+        $responseData = json_decode($json);
+
         if(json_last_error() !== JSON_ERROR_NONE) {
             return $default;
         }
@@ -245,5 +254,32 @@ class Api
             return $default;
         }
         return $responseData;
+    }
+
+    private function justRequest(array $params = []): ?string
+    {
+        $url = "{$this->url}{$this->endPoint}?" . http_build_query($params);
+        return @file_get_contents($url) ?: null;
+    }
+
+    /**
+     * Отправляет запрос через Guzzle
+     * @param array $params
+     * @return string
+     */
+    private function callWithGuzzle(array $params): ?string
+    {
+        try {
+            $className = '\GuzzleHttp\Client';
+            $client = new $className([
+                'base_uri' => $this->url
+            ]);
+            $response = $client->get($this->endPoint, [
+                'query' => $params
+            ]);
+            return (string)$response->getBody();
+        } catch(\Exception $e) {
+            return null;
+        }
     }
 }
