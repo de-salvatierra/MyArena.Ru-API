@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DeSalvatierra\MyArena\Api;
 
+use stdClass;
+use function strtoupper;
 use function class_exists;
 use function http_build_query;
 use function file_get_contents;
@@ -135,7 +137,7 @@ class Api
     */
     public function start(): bool
     {
-        return (bool)$this->request(self::COMMAND_START);
+        return $this->isOk($this->request(self::COMMAND_START));
     }
 
     /**
@@ -144,7 +146,7 @@ class Api
     */
     public function stop(): bool
     {
-        return (bool)$this->request(self::COMMAND_STOP);
+        return $this->isOk($this->request(self::COMMAND_STOP));
     }
 
     /**
@@ -153,7 +155,7 @@ class Api
     */
     public function restart(): bool
     {
-        return (bool)$this->request(self::COMMAND_RESTART);
+        return $this->isOk($this->request(self::COMMAND_RESTART));
     }
 
     /**
@@ -191,7 +193,7 @@ class Api
     public function command(string $command): bool
     {
         $command = str_replace(' ', '%20', $command);
-        return (bool)$this->request(self::COMMAND_CONSOLE_COMMAND, array('cmd' => $command));
+        return $this->isOk($this->request(self::COMMAND_CONSOLE_COMMAND, array('cmd' => $command)));
     }
 
     /**
@@ -247,7 +249,7 @@ class Api
         if(json_last_error() !== JSON_ERROR_NONE) {
             return $default;
         }
-        if (strtolower($responseData->status) !== 'ok') {
+        if (strtoupper($responseData->status) !== 'OK') {
             if(!empty($responseData->message)) {
                 $this->errors[] = $responseData->message;
             }
@@ -256,6 +258,21 @@ class Api
         return $responseData;
     }
 
+    /**
+     * Проверяет ответ на успешность
+     * @param stdClass $response
+     * @return bool
+     */
+    protected function isOk(?stdClass $response): bool
+    {
+        return $response && !empty($response->status) && strtoupper($response->status) === 'OK';
+    }
+
+    /**
+     * Отправляет запрос без HTTP клиента
+     * @param array $params
+     * @return null|string
+     */
     private function justRequest(array $params = []): ?string
     {
         $url = "{$this->url}{$this->endPoint}?" . http_build_query($params);
