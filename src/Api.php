@@ -21,6 +21,7 @@ class Api
     private const COMMAND_STATUS = 'status';
     private const COMMAND_RESTART = 'restart';
     private const COMMAND_GET_MAPS = 'getmaps';
+    private const COMMAND_CONSOLE_LOG = 'getconsole';
     private const COMMAND_CHANGELEVEL = 'changelevel';
     private const COMMAND_GET_RESPORCES = 'getresources';
     private const COMMAND_CONSOLE_COMMAND = 'consolecmd';
@@ -194,6 +195,19 @@ class Api
     {
         $command = str_replace(' ', '%20', $command);
         return $this->isOk($this->request(self::COMMAND_CONSOLE_COMMAND, array('cmd' => $command)));
+    }
+
+    /**
+     * Получает консоль сервера
+     * @return null|string
+     */
+    public function getConsole(): ?string
+    {
+        $data = $this->request(self::COMMAND_CONSOLE_LOG);
+        if($this->isOk($data)) {
+            return (string)$data->console_log;
+        }
+        return null;
     }
 
     /**
